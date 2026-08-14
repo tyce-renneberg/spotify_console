@@ -1,6 +1,8 @@
-
+.env
 .venv/
 __pycache__/
-.env
-*.jpg
+*.pyc
 .DS_Store
+.idea/
+.vscode/
+display.jpg
