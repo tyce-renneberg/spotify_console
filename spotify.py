@@ -1,8 +1,7 @@
 from dotenv import load_dotenv
 import os
 import base64
-from requests import post, get
-import json
+from requests import post
 import secrets
 import hashlib
 import webbrowser
@@ -184,37 +183,3 @@ def get_refresh_token():
   code, verifier = get_authorization_code()
   tokens = exchange_code_for_token(code, verifier)
   return tokens["refresh_token"]
-
-  # --------------------------------------------------
-# 4. Make Spotify API requests
-# --------------------------------------------------
-
-def get_current_track(access_token):
-  url = (
-    "https://api.spotify.com/v1/"
-    "me/player/currently-playing"
-  )
-  response = get(
-    url,
-    headers=get_auth_header(access_token)
-  )
-  return response
-
-def get_album_url(access_token):
-  response = get_current_track(access_token).json()
-  return response["item"]["album"]["images"][0]["url"]
-
-def get_song_name(access_token):
-  response = get_current_track(access_token).json()
-  return response["item"]["name"]
-
-def get_artist_name(access_token):
-  response = get_current_track(access_token).json()
-  track = response["item"]
-  artist_string = ", ".join(artist["name"] for artist in track["artists"] )
-  return artist_string
-
-
-# --------------------------------------------------
-# MAIN PROGRAM
-# --------------------------------------------------
