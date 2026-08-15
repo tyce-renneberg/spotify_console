@@ -1,5 +1,6 @@
 from PIL import Image, ImageDraw, ImageFont
 import spotify
+import spotify_requests
 from io import BytesIO
 import requests
 
@@ -22,7 +23,7 @@ def shorten_text(draw,text,font):
 
 def create_display(access_token):
   # get album cover
-  image_url = spotify.get_album_url(access_token)
+  image_url = spotify_requests.get_album_url(access_token)
   album_cover = image_from_url(image_url)
 
   # paste album cover onto white background
@@ -32,9 +33,9 @@ def create_display(access_token):
   # draw song + album information onto screen
   draw = ImageDraw.Draw(background)
   song_font = ImageFont.truetype("Oswald-Medium.ttf", 35)
-  song_name = shorten_text(draw, spotify.get_song_name(access_token), song_font)
+  song_name = shorten_text(draw, spotify_requests.get_song_name(access_token), song_font)
   artist_font = ImageFont.truetype("Oswald-Medium.ttf", 20)
-  artist_name = shorten_text(draw, spotify.get_artist_name(access_token), artist_font)
+  artist_name = shorten_text(draw, spotify_requests.get_artist_name(access_token), artist_font)
 
   draw.text(
      (550,50),

@@ -174,12 +174,22 @@ def exchange_code_for_token(authorization_code, code_verifier):
 def get_auth_header(token):
   return {"Authorization": "Bearer " + token}
 
-def get_access_token():
+def get_tokens():
   code, verifier = get_authorization_code()
   tokens = exchange_code_for_token(code, verifier)
-  return tokens["access_token"]
+  return tokens["access_token"], tokens["refresh_token"]
 
-def get_refresh_token():
-  code, verifier = get_authorization_code()
-  tokens = exchange_code_for_token(code, verifier)
-  return tokens["refresh_token"]
+def get_new_token(refresh_token):
+  url = "https://accounts.spotify.com/api/token"
+  data = {
+    "client_id": CLIENT_ID,
+    "grant_type": "refresh_token",
+    "refresh_token": refresh_token
+  }
+  header = {
+    "Content-Type":"application/x-www-form-urlencoded"
+  }
+  response = post(url,data=data,headers=header)
+  response.raise_for_status()
+  response.json()
+  return response["access_token"]
